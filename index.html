@@ -2266,17 +2266,21 @@
                         // Mostrar la sección de selección
                         companionsSelectionSection.style.display = 'block';
                         
-                        // Seleccionar radio button según cantidad actual (solo opciones de disminución)
+                        // Desmarcar todas las opciones primero
                         document.getElementById('companions2').checked = false;
-                        if (currentGuestCantidad >= 1) {
-                            document.getElementById('companions1').checked = currentGuestCantidad === 1;
+                        document.getElementById('companions1').checked = false;
+                        document.getElementById('companions0').checked = false;
+                        
+                        // Mostrar opciones según la cantidad actual (solo opciones de disminución)
+                        if (currentGuestCantidad === 2) {
+                            // Si tiene 2, mostrar "1 invitado" y "Sin acompañantes"
                             companions1Option.style.display = 'flex';
-                        } else {
-                            document.getElementById('companions1').checked = false;
+                            companions0Option.style.display = 'flex';
+                        } else if (currentGuestCantidad === 1) {
+                            // Si tiene 1, mostrar solo "Sin acompañantes"
                             companions1Option.style.display = 'none';
+                            companions0Option.style.display = 'flex';
                         }
-                        document.getElementById('companions0').checked = currentGuestCantidad === 0;
-                        companions0Option.style.display = 'flex';
                     }
                     
                     guestSearchResult.style.display = 'block';
@@ -2365,21 +2369,25 @@
                     // Si la nueva cantidad es 0, ocultar toda la sección de selección
                     if (newCantidad === 0) {
                         companionsSelectionSection.style.display = 'none';
-                    } else {
+                        // Desmarcar todas las opciones
+                        document.getElementById('companions1').checked = false;
+                        document.getElementById('companions0').checked = false;
+                    } else if (newCantidad === 1) {
+                        // Si tiene 1, mostrar solo "Sin acompañantes"
                         companionsSelectionSection.style.display = 'block';
-                        
-                        // Ocultar opciones que ya no son válidas
-                        if (newCantidad >= 1) {
-                            companions1Option.style.display = 'flex';
-                        } else {
-                            companions1Option.style.display = 'none';
-                        }
-                        
+                        companions1Option.style.display = 'none';
                         companions0Option.style.display = 'flex';
-                        
                         // Actualizar selección
-                        document.getElementById('companions1').checked = newCantidad === 1;
-                        document.getElementById('companions0').checked = newCantidad === 0;
+                        document.getElementById('companions1').checked = false;
+                        document.getElementById('companions0').checked = false;
+                    } else if (newCantidad === 2) {
+                        // Si tiene 2, mostrar "1 invitado" y "Sin acompañantes"
+                        companionsSelectionSection.style.display = 'block';
+                        companions1Option.style.display = 'flex';
+                        companions0Option.style.display = 'flex';
+                        // Actualizar selección
+                        document.getElementById('companions1').checked = false;
+                        document.getElementById('companions0').checked = false;
                     }
 
                 } catch (error) {
