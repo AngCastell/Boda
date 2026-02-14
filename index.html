@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#f5f3ed">
     <title>Pre-Invitación de Boda</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +21,22 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden;
+            overflow-y: hidden;
+            width: 100%;
+            width: 100vw;
+            max-width: 100vw;
+            height: 100%;
+            height: 100vh;
+            height: 100dvh;
+            height: -webkit-fill-available;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             background: #f5f3ed;
@@ -25,18 +44,47 @@
                 radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
             background-size: 20px 20px;
             min-height: 100vh;
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
             overflow-x: hidden;
-            position: relative;
+            overflow-y: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            width: 100vw;
+            max-width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            height: -webkit-fill-available;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        body.main-content-visible {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* ========== PANTALLA DE PRESENTACIÓN ========== */
         .welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #f5f3ed;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            height: -webkit-fill-available !important;
+            min-height: 100vh !important;
+            min-height: 100dvh !important;
+            min-height: -webkit-fill-available !important;
+            background: #faf8f3;
             background-image: 
                 radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
             background-size: 20px 20px;
@@ -45,9 +93,12 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 20px;
+            padding: 30px 20px !important;
+            margin: 0 !important;
+            border: none !important;
             transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-            overflow-y: auto;
+            overflow: hidden;
+            box-sizing: border-box;
         }
 
         .welcome-screen.hidden {
@@ -56,64 +107,73 @@
             pointer-events: none;
         }
 
-        /* Imagen floral en la pantalla de presentación */
-        .welcome-screen::after {
+        /* Imagen decorativa de fondo - elegante y visible */
+        .welcome-screen::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600%;
-            max-width: 600px;
-            height: 800%;
-            max-height: 800px;
-            background-image: url('floral.png');
-            background-size: contain;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('decoracion.png');
+            background-size: 70%;
             background-position: center center;
             background-repeat: no-repeat;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.70;
-            mix-blend-mode: darken;
-            filter: 
-                contrast(1.2) 
-                brightness(1.1)
-                drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+            opacity: 0.5;
+            mix-blend-mode: multiply;
         }
 
-        .welcome-content {
-            text-align: center;
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            padding: 40px 20px;
-            z-index: 2;
+        .welcome-screen::after {
+            display: none !important;
         }
 
-        /* Monograma PNG */
+        /* Contenedor welcome-content eliminado - contenido directamente en welcome-screen */
+
+        /* Monograma PNG - diseño elegante */
         .monogram-container {
             position: relative;
-            margin: 0 auto 30px;
+            margin: 0 auto 20px;
             width: 100%;
-            max-width: 350px;
+            max-width: 100%;
             height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
             background: transparent;
+            flex-shrink: 0;
+            text-align: center;
+            z-index: 2;
+            padding: 10px;
         }
 
         .monogram-svg {
-            width: 100%;
+            width: auto;
             height: auto;
             max-width: 350px;
+            max-height: 350px;
+            width: 350px;
+            height: auto;
             object-fit: contain;
             background: transparent;
             mix-blend-mode: darken;
             filter: 
-                contrast(1.3) 
-                brightness(0.95)
-                drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+                contrast(1.2) 
+                brightness(0.98)
+                drop-shadow(0 4px 12px rgba(0, 0, 0, 0.12));
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            z-index: 2;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .monogram-svg:hover {
+            transform: scale(1.02);
         }
 
         .monogram-svg[src*="logo"] {
@@ -126,79 +186,148 @@
         }
 
         .welcome-subtitle {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            color: #2c2c2c;
-            margin-bottom: 15px;
-            font-weight: 300;
-            letter-spacing: 1px;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #3a3a3a;
+            margin-bottom: 12px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            opacity: 0.85;
         }
 
         .names-welcome {
             font-family: 'Dancing Script', cursive;
-            font-size: 42px;
+            font-size: 36px;
             color: #2c2c2c;
             font-weight: 600;
-            line-height: 1.3;
-            margin: 0 0 20px;
+            line-height: 1.4;
+            margin: 0 0 15px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            letter-spacing: 1px;
         }
 
         .ampersand {
             font-family: 'Dancing Script', cursive;
-            font-size: 36px;
-            color: #2c2c2c;
-            margin: 0 8px;
-            font-weight: 400;
+            font-size: 32px;
+            color: #8b7355;
+            margin: 0 12px;
+            font-weight: 500;
+            opacity: 0.8;
         }
 
         .welcome-special-message {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            color: #2c2c2c;
-            margin: 20px 0;
-            font-weight: 300;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: #5a5a5a;
+            margin: 12px 0;
+            font-weight: 400;
             font-style: italic;
+            width: 100%;
+            padding: 0 30px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .welcome-separator {
-            width: 200px;
+            width: 180px;
             height: 1px;
-            background: #2c2c2c;
-            margin: 25px auto;
+            background: linear-gradient(to right, transparent, #8b7355, transparent);
+            margin: 15px auto;
+            flex-shrink: 0;
+            z-index: 2;
+            position: relative;
+            opacity: 0.6;
+        }
+
+        .welcome-separator::before,
+        .welcome-separator::after {
+            content: '❋';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b7355;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        .welcome-separator::before {
+            left: -25px;
+        }
+
+        .welcome-separator::after {
+            right: -25px;
         }
 
         .welcome-date-time {
-            margin: 25px 0;
+            margin: 12px 0;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            z-index: 2;
+            position: relative;
         }
 
         .welcome-date {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            color: #2c2c2c;
-            margin-bottom: 8px;
-            font-weight: 300;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #3a3a3a;
+            margin-bottom: 0;
+            font-weight: 400;
+            letter-spacing: 2px;
         }
 
         .welcome-btn {
             background: transparent;
             color: #2c2c2c;
-            padding: 12px 35px;
-            border: 1.5px solid #2c2c2c;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 14px 40px;
+            border: 2px solid #2c2c2c;
+            border-radius: 0;
+            font-size: 13px;
             font-weight: 400;
             cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Montserrat', sans-serif;
+            transition: all 0.4s ease;
+            font-family: 'Playfair Display', serif;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 20px;
+            letter-spacing: 3px;
+            margin: 20px auto 0;
+            position: relative;
+            z-index: 10;
+            display: block;
+            visibility: visible;
+            opacity: 1;
+            width: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .welcome-btn:hover {
             background: #2c2c2c;
-            color: #f5f3ed;
-            transform: translateY(-2px);
+            color: #faf8f3;
+            border-color: #2c2c2c;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(44, 44, 44, 0.3);
         }
 
         .welcome-btn:active {
@@ -208,12 +337,26 @@
         /* ========== CONTENIDO PRINCIPAL (INVITACIÓN) ========== */
         .main-content {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             padding: 20px;
+            padding-top: max(calc(20px + env(safe-area-inset-top)), 20px);
+            padding-bottom: max(calc(20px + env(safe-area-inset-bottom)), 20px);
+            padding-left: max(calc(20px + env(safe-area-inset-left)), 20px);
+            padding-right: max(calc(20px + env(safe-area-inset-right)), 20px);
             max-width: 600px;
             margin: 0 auto;
             width: 100%;
-            position: relative;
+            width: 100vw;
             min-height: 100vh;
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
+            box-sizing: border-box;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .main-content.show {
@@ -254,7 +397,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('floral.png');
+            background-image: url('floralPage.png');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
@@ -479,23 +622,27 @@
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
             width: 100%;
+            width: 100vw;
             height: 100vh;
+            height: 100dvh;
+            height: -webkit-fill-available;
+            min-height: -webkit-fill-available;
             background: #faf8f3;
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
                 radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
-            background-size: 100% 100%, 100% 100%, 20px 20px;
-            background-position: center center;
-            background-repeat: no-repeat;
+            background-size: 20px 20px;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 2000;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
             overflow-y: auto;
+            box-sizing: border-box;
         }
 
         .farewell-screen.show {
@@ -507,10 +654,18 @@
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
             width: 100%;
             height: 100%;
-            background: rgba(250, 248, 243, 0.75);
+            background-image: url('decoracion.png');
+            background-size: 70%;
+            background-position: center center;
+            background-repeat: no-repeat;
             z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+            mix-blend-mode: multiply;
         }
 
         .farewell-content {
@@ -518,25 +673,32 @@
             position: relative;
             width: 100%;
             max-width: 500px;
-            z-index: 1;
+            padding: 20px;
+            padding-top: max(calc(20px + env(safe-area-inset-top)), 20px);
+            padding-bottom: max(calc(20px + env(safe-area-inset-bottom)), 20px);
+            padding-left: max(calc(20px + env(safe-area-inset-left)), 20px);
+            padding-right: max(calc(20px + env(safe-area-inset-right)), 20px);
+            z-index: 2;
+            box-sizing: border-box;
         }
 
         .farewell-logo-container {
             position: relative;
             margin: 0 auto 30px;
             width: 100%;
-            max-width: 250px;
+            max-width: 350px;
             height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
             background: transparent;
+            z-index: 2;
         }
 
         .farewell-logo {
             width: 100%;
             height: auto;
-            max-width: 250px;
+            max-width: 350px;
             object-fit: contain;
             background: transparent;
             mix-blend-mode: darken;
@@ -544,9 +706,11 @@
                 contrast(1.3) 
                 brightness(0.95)
                 drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+            position: relative;
+            z-index: 2;
         }
 
-        .farewell-logo[src*="logo"] {
+        .farewell-logo[src*="logo3"] {
             background: transparent !important;
             mix-blend-mode: darken;
             filter: 
@@ -561,6 +725,8 @@
             color: #b8945f;
             font-weight: 700;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
 
         .farewell-message {
@@ -568,6 +734,8 @@
             font-size: 18px;
             color: #6b7d6b;
             line-height: 1.8;
+            position: relative;
+            z-index: 2;
             margin: 30px 0;
             font-weight: 300;
         }
@@ -696,17 +864,10 @@
             animation: fadeInUp 0.8s ease-out 1.8s both;
         }
 
-        .welcome-btn {
-            animation: fadeInUp 0.8s ease-out 2.1s both;
-        }
+        /* Animaciones de botones removidas */
 
-        .welcome-btn:hover {
-            animation: none;
-        }
-
-        .welcome-screen::after {
-            animation: fadeIn 2s ease-out;
-        }
+        /* Arreglos florales en animaciones */
+        /* Arreglos florales removidos */
 
         /* Animaciones contenido principal */
         .invitation-card {
@@ -749,12 +910,213 @@
             animation: slideIn 0.6s ease-out 1.9s both;
         }
 
-        .submit-btn {
-            animation: fadeInUp 0.8s ease-out 2.1s both;
+        /* Animaciones de botones removidas */
+
+        /* ========== BOTÓN Y MODAL PARA MODIFICAR ACOMPAÑANTES ========== */
+        .modify-companions-btn {
+            background: transparent;
+            color: #6b7d6b;
+            padding: 12px 35px;
+            border: 1.5px solid #8b7355;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            width: 100%;
         }
 
-        .submit-btn:hover {
-            animation: pulse 1s ease-in-out infinite;
+        .modify-companions-btn:hover {
+            background: #8b7355;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 115, 85, 0.3);
+        }
+
+        .modify-companions-btn:active {
+            transform: translateY(0);
+        }
+
+        .companions-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 3000;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .companions-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .companions-modal-content {
+            background: #ffffff;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .companions-modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .companions-modal-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #2c2c2c;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .companions-modal-close {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #6b7d6b;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .companions-modal-close:hover {
+            color: #2c2c2c;
+        }
+
+        .companions-modal-body {
+            padding: 30px;
+        }
+
+        .search-btn {
+            background: #8b7355;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-family: 'Montserrat', sans-serif;
+            width: 100%;
+        }
+
+        .search-btn:hover {
+            background: #6b5a45;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 115, 85, 0.3);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .guest-search-result {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .guest-info {
+            margin-bottom: 25px;
+        }
+
+        .guest-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #2c2c2c;
+            margin: 0 0 10px;
+            font-weight: 600;
+        }
+
+        .guest-attendance-info {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #6b7d6b;
+            margin: 5px 0;
+        }
+
+        .guest-companions-info {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #2c2c2c;
+            margin: 10px 0;
+        }
+
+        .companions-radio-group {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .companions-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .companions-message.success {
+            background: #f0f7f0;
+            border: 1px solid #7a9a7a;
+            color: #5a7a5a;
+        }
+
+        .companions-message.error {
+            background: #fff0f0;
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+        }
+
+        @media (max-width: 480px) {
+            .companions-modal {
+                padding: 10px;
+            }
+
+            .companions-modal-content {
+                max-height: 95vh;
+            }
+
+            .companions-modal-header {
+                padding: 20px;
+            }
+
+            .companions-modal-header h2 {
+                font-size: 20px;
+            }
+
+            .companions-modal-body {
+                padding: 20px;
+            }
+
+            .modify-companions-btn {
+                padding: 12px 25px;
+                font-size: 12px;
+            }
         }
 
         /* Animaciones pantalla de despedida */
@@ -787,69 +1149,164 @@
             .invitation-card {
                 padding: 50px 35px;
             }
+
+            .welcome-screen::before {
+                background-size: 90%;
+                opacity: 0.45;
+            }
+
+            .invitation-card::after {
+                background-size: cover;
+                opacity: 0.12;
+            }
+
+            .farewell-screen::before {
+                background-size: 90%;
+                opacity: 0.45;
+            }
         }
 
         @media (max-width: 480px) {
             .welcome-screen {
-                padding: 15px;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden;
+                height: 100vh !important;
+                height: 100dvh !important;
+                height: -webkit-fill-available !important;
+                min-height: 100vh !important;
+                min-height: 100dvh !important;
+                min-height: -webkit-fill-available !important;
+                width: 100vw !important;
+                max-width: 100vw !important;
+                justify-content: center;
+                align-items: center;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+            }
+
+            .welcome-screen::before {
+                opacity: 0.5;
+                background-size: cover;
+                background-position: center center;
             }
 
             .welcome-screen::after {
-                opacity: 0.15;
-                width: 120%;
-                max-width: none;
-                height: 120%;
-                max-height: none;
+                display: none !important;
             }
 
-            .welcome-content {
-                max-width: 100%;
-                padding: 30px 15px;
+            .farewell-screen::before {
+                opacity: 0.5;
+                background-size: cover;
+                background-position: center center;
             }
+
+            /* Contenedor welcome-content eliminado */
 
             .monogram-container {
-                max-width: 250px;
-                margin-bottom: 25px;
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
             }
 
             .monogram-svg {
-                max-width: 250px;
+                max-width: 280px;
+                max-height: 280px;
+                width: 280px;
+                height: auto;
             }
 
             .welcome-subtitle {
-                font-size: 16px;
+                font-size: 15px;
+                width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                flex-shrink: 0;
             }
 
             .names-welcome {
-                font-size: 32px;
+                font-size: 28px;
+                width: 100%;
+                padding: 0 20px;
+                box-sizing: border-box;
+                margin-bottom: 20px;
+                flex-shrink: 0;
             }
 
             .ampersand {
-                font-size: 28px;
+                font-size: 26px;
             }
 
             .welcome-special-message {
-                font-size: 13px;
-                margin: 15px 0;
+                font-size: 14px;
+                margin: 12px 0;
+                width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
+                flex-shrink: 0;
             }
 
             .welcome-separator {
-                width: 150px;
-                margin: 20px auto;
+                width: 160px;
+                margin: 15px auto;
+                flex-shrink: 0;
+            }
+
+            .welcome-date-time {
+                width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
+                margin-top: 10px;
+                flex-shrink: 0;
             }
 
             .welcome-date {
-                font-size: 16px;
+                font-size: 15px;
             }
 
             .welcome-btn {
-                padding: 10px 25px;
-                font-size: 12px;
-                letter-spacing: 1.5px;
+                padding: 16px 35px;
+                font-size: 15px;
+                letter-spacing: 2px;
+                width: auto;
+                min-width: 220px;
+                position: relative;
+                z-index: 10;
+                display: block;
+                visibility: visible;
+                opacity: 1;
+                margin: 20px auto 0;
+                flex-shrink: 0;
             }
 
             .main-content {
                 padding: 10px;
+                width: 100%;
+                width: 100vw;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+
+            .invitation-card {
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .invitation-card {
@@ -858,6 +1315,7 @@
             }
 
             .invitation-card::after {
+                background-size: cover;
                 opacity: 0.12;
             }
 
@@ -951,12 +1409,12 @@
             }
 
             .farewell-logo-container {
-                max-width: 200px;
+                max-width: 280px;
                 margin-bottom: 25px;
             }
 
             .farewell-logo {
-                max-width: 200px;
+                max-width: 280px;
             }
 
             .farewell-title {
@@ -985,12 +1443,130 @@
         }
 
         @media (max-width: 360px) {
+            .welcome-screen {
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden;
+                height: 100vh !important;
+                height: 100dvh !important;
+                height: -webkit-fill-available !important;
+                min-height: 100vh !important;
+                min-height: 100dvh !important;
+                min-height: -webkit-fill-available !important;
+                width: 100vw !important;
+                max-width: 100vw !important;
+                justify-content: center;
+                align-items: center;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+            }
+
+            .welcome-screen::before {
+                opacity: 0.5;
+                background-size: cover;
+                background-position: center center;
+            }
+
             .welcome-screen::after {
-                opacity: 0.12;
-                width: 130%;
-                max-width: none;
-                height: 130%;
-                max-height: none;
+                display: none !important;
+            }
+
+            .farewell-screen::before {
+                opacity: 0.5;
+                background-size: cover;
+                background-position: center center;
+            }
+
+            /* Contenedor welcome-content eliminado */
+
+            .monogram-container {
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 25px;
+                padding: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .monogram-svg {
+                max-width: 280px;
+                max-height: 280px;
+                width: 280px;
+                height: auto;
+            }
+
+            .names-welcome {
+                font-size: 26px;
+                width: 100%;
+                padding: 0 20px;
+                box-sizing: border-box;
+                margin-bottom: 20px;
+                flex-shrink: 0;
+            }
+
+            .welcome-subtitle {
+                font-size: 16px;
+                padding: 0 20px;
+                margin-bottom: 15px;
+                flex-shrink: 0;
+                letter-spacing: 2px;
+            }
+
+            .welcome-special-message {
+                font-size: 15px;
+                padding: 0 25px;
+                margin: 15px 0;
+                flex-shrink: 0;
+                max-width: 100%;
+            }
+
+            .welcome-date-time {
+                padding: 0 20px;
+                margin-top: 20px;
+                flex-shrink: 0;
+            }
+
+            .welcome-date {
+                font-size: 17px;
+                letter-spacing: 1.5px;
+            }
+
+            .welcome-separator {
+                width: 140px;
+                margin: 20px auto;
+                flex-shrink: 0;
+            }
+
+            .welcome-separator::before,
+            .welcome-separator::after {
+                font-size: 10px;
+            }
+
+            .welcome-separator::before {
+                left: -20px;
+            }
+
+            .welcome-separator::after {
+                right: -20px;
+            }
+
+            .welcome-btn {
+                min-width: 200px;
+                padding: 14px 35px;
+                font-size: 12px;
+                letter-spacing: 2.5px;
+                position: relative;
+                z-index: 2;
+                display: block;
+                visibility: visible;
+                opacity: 1;
+                margin: 30px auto 0;
+                flex-shrink: 0;
             }
 
             .invitation-card {
@@ -998,6 +1574,7 @@
             }
 
             .invitation-card::after {
+                background-size: cover;
                 opacity: 0.1;
             }
 
@@ -1072,36 +1649,34 @@
 <body>
     <!-- Pantalla de bienvenida -->
     <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-content">
-            <!-- Monograma PNG -->
-            <div class="monogram-container">
-                <img src="logo.png" alt="Monograma T & D" class="monogram-svg">
-            </div>
-
-            <!-- Título -->
-            <div class="welcome-subtitle">Nuestra Boda</div>
-
-            <!-- Nombres -->
-            <div class="names-welcome">
-                <span id="name1Welcome">Trinidad</span>
-                <span class="ampersand">y</span>
-                <span id="name2Welcome">Dioselyn</span>
-            </div>
-
-            <!-- Mensaje especial -->
-            <div class="welcome-special-message">¿No faltes en este día tan especial!</div>
-
-            <!-- Línea separadora -->
-            <div class="welcome-separator"></div>
-
-            <!-- Fecha y hora -->
-            <div class="welcome-date-time">
-                <div class="welcome-date" id="welcomeDate">02 / Mayo / 2026</div>
-            </div>
-
-            <!-- Botón -->
-            <button class="welcome-btn" id="welcomeBtn">Continuar</button>
+        <!-- Monograma PNG -->
+        <div class="monogram-container">
+            <img src="logo3.png" alt="Monograma R & D" class="monogram-svg">
         </div>
+
+        <!-- Título -->
+        <div class="welcome-subtitle">Nuestra Boda</div>
+
+        <!-- Nombres -->
+        <div class="names-welcome">
+            <span id="name1Welcome">José Raúl Trinidad Herrera</span>
+            <span class="ampersand"><br>y<br></span>
+            <span id="name2Welcome">Dioselyn Palma Hernández</span>
+        </div>
+
+        <!-- Mensaje especial -->
+        <div class="welcome-special-message">¡No faltes en este día tan especial!</div>
+
+        <!-- Línea separadora -->
+        <div class="welcome-separator"></div>
+
+        <!-- Fecha y hora -->
+        <div class="welcome-date-time">
+            <div class="welcome-date" id="welcomeDate">02 / Mayo / 2026</div>
+        </div>
+
+        <!-- Botón -->
+        <button class="welcome-btn" id="welcomeBtn">Continuar</button>
     </div>
 
     <!-- Contenido principal (Invitación) -->
@@ -1185,7 +1760,59 @@
                         </div>
                         <button type="submit" class="submit-btn">Confirmar Asistencia</button>
                     </form>
+                    
+                    <!-- Botón para modificar acompañantes -->
+                    <button type="button" class="modify-companions-btn" id="modifyCompanionsBtn">Modificar Acompañantes</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para modificar acompañantes -->
+    <div class="companions-modal" id="companionsModal">
+        <div class="companions-modal-content">
+            <div class="companions-modal-header">
+                <h2>Modificar Acompañantes</h2>
+                <button class="companions-modal-close" id="companionsModalClose">&times;</button>
+            </div>
+            <div class="companions-modal-body">
+                <div class="form-group">
+                    <label for="searchGuestName">Buscar invitado por nombre completo *</label>
+                    <input type="text" id="searchGuestName" placeholder="Ingrese su nombre completo">
+                    <button type="button" class="search-btn" id="searchGuestBtn">Buscar</button>
+                </div>
+                
+                <div id="guestSearchResult" class="guest-search-result" style="display: none;">
+                    <div class="guest-info">
+                        <h3 id="foundGuestName"></h3>
+                        <p class="guest-attendance-info" id="guestAttendanceInfo"></p>
+                        <p class="guest-companions-info">Acompañantes actuales: <strong id="currentCompanionsCount">2</strong></p>
+                    </div>
+                    
+                    <div id="companionsSelectionSection">
+                        <div class="form-group">
+                            <label>Selecciona la nueva cantidad de acompañantes:</label>
+                            <div class="radio-group companions-radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="companionsCount" value="2" id="companions2">
+                                    <span>2 acompañantes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="companionsCount" value="1" id="companions1">
+                                    <span>1 invitado</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="companionsCount" value="0" id="companions0">
+                                    <span>Sin acompañantes</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="submit-btn" id="saveCompanionsBtn">Guardar Cambios</button>
+                    </div>
+                </div>
+                
+                <div id="companionsMessage" class="companions-message" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -1195,7 +1822,7 @@
         <div class="farewell-content">
             <!-- Logo -->
             <div class="farewell-logo-container">
-                <img src="logo.png" alt="Monograma T & D" class="farewell-logo">
+                <img src="logo3.png" alt="Monograma R & D" class="farewell-logo">
             </div>
 
             <h1 class="farewell-title" id="farewellTitle">¡Gracias!</h1>
@@ -1245,12 +1872,15 @@
         welcomeBtn.addEventListener('click', function() {
             welcomeScreen.classList.add('hidden');
             mainContent.classList.add('show');
+            document.body.classList.add('main-content-visible');
+            // Start invitation countdown here
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
         });
 
-        // Permitir también hacer clic en el área del contenido para continuar
-        const welcomeContent = document.querySelector('.welcome-content');
-        welcomeContent.addEventListener('click', function(e) {
-            if (e.target !== welcomeBtn && !e.target.closest('.welcome-btn')) {
+        // Permitir también hacer clic en el área de la pantalla para continuar
+        welcomeScreen.addEventListener('click', function(e) {
+            if (e.target !== welcomeBtn && !e.target.closest('.welcome-btn') && !e.target.closest('.monogram-container')) {
                 welcomeBtn.click();
             }
         });
@@ -1390,20 +2020,26 @@
                             localStorage.setItem('weddingGuests', JSON.stringify(guestList));
                         } catch (supabaseError) {
                             console.error('Error al guardar en Supabase:', supabaseError);
+                            // Si no asistirá, cantidad_acompañante = 0, de lo contrario = 2
+                            const cantidadAcompañante = formData.attendance === 'no' ? 0 : 2;
                             savedGuest = {
                                 id: Date.now(),
                                 name: formData.name,
                                 attendance: formData.attendance,
+                                cantidad_acompañante: cantidadAcompañante,
                                 timestamp: new Date().toLocaleString('es-MX')
                             };
                             guestList.push(savedGuest);
                             localStorage.setItem('weddingGuests', JSON.stringify(guestList));
                         }
                     } else {
+                        // Si no asistirá, cantidad_acompañante = 0, de lo contrario = 2
+                        const cantidadAcompañante = formData.attendance === 'no' ? 0 : 2;
                         savedGuest = {
                             id: Date.now(),
                             name: formData.name,
                             attendance: formData.attendance,
+                            cantidad_acompañante: cantidadAcompañante,
                             timestamp: new Date().toLocaleString('es-MX')
                         };
                         guestList.push(savedGuest);
@@ -1412,6 +2048,7 @@
 
                     // Ocultar contenido principal y mostrar pantalla de despedida
                     mainContent.classList.remove('show');
+                    document.body.classList.remove('main-content-visible');
                     farewellScreen.classList.add('show');
 
                     // Personalizar mensaje según la respuesta
@@ -1484,6 +2121,301 @@
             if (farewellHoursEl) farewellHoursEl.textContent = String(hours).padStart(2, '0');
             if (farewellMinutesEl) farewellMinutesEl.textContent = String(minutes).padStart(2, '0');
             if (farewellSecondsEl) farewellSecondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        // ========== MODAL PARA MODIFICAR ACOMPAÑANTES ==========
+        const modifyCompanionsBtn = document.getElementById('modifyCompanionsBtn');
+        const companionsModal = document.getElementById('companionsModal');
+        const companionsModalClose = document.getElementById('companionsModalClose');
+        const searchGuestBtn = document.getElementById('searchGuestBtn');
+        const searchGuestNameInput = document.getElementById('searchGuestName');
+        const guestSearchResult = document.getElementById('guestSearchResult');
+        const saveCompanionsBtn = document.getElementById('saveCompanionsBtn');
+        const companionsMessage = document.getElementById('companionsMessage');
+        let currentGuestId = null;
+        let currentGuestCantidad = 2;
+
+        // Abrir modal
+        if (modifyCompanionsBtn) {
+            modifyCompanionsBtn.addEventListener('click', function() {
+                companionsModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                // Limpiar formulario
+                searchGuestNameInput.value = '';
+                guestSearchResult.style.display = 'none';
+                companionsMessage.style.display = 'none';
+                currentGuestId = null;
+                
+                // Resetear visibilidad de opciones
+                const companionsSelectionSection = document.getElementById('companionsSelectionSection');
+                const companions2Option = document.getElementById('companions2').closest('.radio-option');
+                const companions1Option = document.getElementById('companions1').closest('.radio-option');
+                const companions0Option = document.getElementById('companions0').closest('.radio-option');
+                
+                // Mostrar sección de selección por defecto al abrir el modal
+                companionsSelectionSection.style.display = 'block';
+                
+                companions2Option.style.display = 'none'; // Siempre oculto (solo disminución)
+                companions1Option.style.display = 'flex';
+                companions0Option.style.display = 'flex';
+                
+                // Desmarcar todas las opciones
+                document.getElementById('companions2').checked = false;
+                document.getElementById('companions1').checked = false;
+                document.getElementById('companions0').checked = false;
+            });
+        }
+
+        // Cerrar modal
+        if (companionsModalClose) {
+            companionsModalClose.addEventListener('click', function() {
+                companionsModal.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera
+        if (companionsModal) {
+            companionsModal.addEventListener('click', function(e) {
+                if (e.target === companionsModal) {
+                    companionsModal.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+
+        // Buscar invitado
+        if (searchGuestBtn) {
+            searchGuestBtn.addEventListener('click', async function() {
+                const searchName = searchGuestNameInput.value.trim();
+                
+                if (!searchName || searchName.length < 2) {
+                    showCompanionsMessage('Por favor ingresa un nombre válido (mínimo 2 caracteres)', 'error');
+                    return;
+                }
+
+                // Mostrar indicador de carga
+                searchGuestBtn.disabled = true;
+                searchGuestBtn.textContent = 'Buscando...';
+
+                try {
+                    let guest = null;
+
+                    // Intentar buscar en Supabase si está disponible
+                    if (useSupabase && supabaseService) {
+                        try {
+                            guest = await supabaseService.findGuestByName(searchName);
+                        } catch (error) {
+                            console.error('Error al buscar en Supabase:', error);
+                            // Intentar buscar en localStorage como respaldo
+                            guestList = JSON.parse(localStorage.getItem('weddingGuests')) || [];
+                            guest = guestList.find(g => g.name.toLowerCase() === searchName.toLowerCase());
+                        }
+                    } else {
+                        // Buscar en localStorage
+                        guestList = JSON.parse(localStorage.getItem('weddingGuests')) || [];
+                        guest = guestList.find(g => g.name.toLowerCase() === searchName.toLowerCase());
+                    }
+
+                    if (!guest) {
+                        showCompanionsMessage('No se encontró ningún invitado con ese nombre. Por favor verifica el nombre completo.', 'error');
+                        guestSearchResult.style.display = 'none';
+                        return;
+                    }
+
+                    // Si el invitado no asistirá, no mostrar resultado
+                    if (guest.attendance === 'no') {
+                        showCompanionsMessage('Este invitado ha indicado que no asistirá. No se puede modificar la cantidad de acompañantes.', 'error');
+                        guestSearchResult.style.display = 'none';
+                        return;
+                    }
+
+                    // Mostrar resultado
+                    currentGuestId = guest.id;
+                    // Usar ?? en lugar de || para que 0 no se convierta en 2
+                    // Si cantidad_acompañante es null o undefined, usar 2, pero si es 0, mantener 0
+                    currentGuestCantidad = (guest.cantidad_acompañante !== null && guest.cantidad_acompañante !== undefined) 
+                        ? guest.cantidad_acompañante 
+                        : 2;
+                    
+                    document.getElementById('foundGuestName').textContent = guest.name;
+                    document.getElementById('currentCompanionsCount').textContent = currentGuestCantidad;
+                    
+                    const attendanceText = guest.attendance === 'yes' 
+                        ? '✓ Asistencia confirmada' 
+                        : '✗ No asistirá';
+                    document.getElementById('guestAttendanceInfo').textContent = attendanceText;
+                    
+                    // Obtener referencias a los elementos
+                    const companions2Option = document.getElementById('companions2').closest('.radio-option');
+                    const companions1Option = document.getElementById('companions1').closest('.radio-option');
+                    const companions0Option = document.getElementById('companions0').closest('.radio-option');
+                    const companionsSelectionSection = document.getElementById('companionsSelectionSection');
+                    
+                    // Ocultar la opción de 2 acompañantes (solo se puede disminuir)
+                    companions2Option.style.display = 'none';
+                    
+                    // Si el invitado tiene 0 acompañantes, ocultar toda la sección de selección
+                    if (currentGuestCantidad === 0) {
+                        companionsSelectionSection.style.display = 'none';
+                        // Desmarcar todas las opciones
+                        document.getElementById('companions2').checked = false;
+                        document.getElementById('companions1').checked = false;
+                        document.getElementById('companions0').checked = false;
+                    } else {
+                        // Mostrar la sección de selección
+                        companionsSelectionSection.style.display = 'block';
+                        
+                        // Seleccionar radio button según cantidad actual (solo opciones de disminución)
+                        document.getElementById('companions2').checked = false;
+                        if (currentGuestCantidad >= 1) {
+                            document.getElementById('companions1').checked = currentGuestCantidad === 1;
+                            companions1Option.style.display = 'flex';
+                        } else {
+                            document.getElementById('companions1').checked = false;
+                            companions1Option.style.display = 'none';
+                        }
+                        document.getElementById('companions0').checked = currentGuestCantidad === 0;
+                        companions0Option.style.display = 'flex';
+                    }
+                    
+                    guestSearchResult.style.display = 'block';
+                    companionsMessage.style.display = 'none';
+
+                } catch (error) {
+                    console.error('Error al buscar invitado:', error);
+                    showCompanionsMessage('Error al buscar el invitado. Por favor intenta nuevamente.', 'error');
+                } finally {
+                    searchGuestBtn.disabled = false;
+                    searchGuestBtn.textContent = 'Buscar';
+                }
+            });
+        }
+
+        // Guardar cambios de acompañantes
+        if (saveCompanionsBtn) {
+            saveCompanionsBtn.addEventListener('click', async function() {
+                if (!currentGuestId) {
+                    showCompanionsMessage('Por favor busca un invitado primero.', 'error');
+                    return;
+                }
+
+                const selectedCount = document.querySelector('input[name="companionsCount"]:checked');
+                if (!selectedCount) {
+                    showCompanionsMessage('Por favor selecciona una cantidad de acompañantes.', 'error');
+                    return;
+                }
+
+                const newCantidad = parseInt(selectedCount.value);
+
+                // Validar que no se esté aumentando
+                if (newCantidad > currentGuestCantidad) {
+                    showCompanionsMessage('No se puede aumentar la cantidad de acompañantes. Solo se permite disminuir.', 'error');
+                    return;
+                }
+
+                // Mostrar indicador de carga
+                saveCompanionsBtn.disabled = true;
+                saveCompanionsBtn.textContent = 'Guardando...';
+
+                try {
+                    // Intentar actualizar en Supabase si está disponible
+                    if (useSupabase && supabaseService) {
+                        try {
+                            await supabaseService.updateCantidadAcompañantes(currentGuestId, newCantidad);
+                            
+                            // Actualizar en localStorage también
+                            guestList = JSON.parse(localStorage.getItem('weddingGuests')) || [];
+                            const guestIndex = guestList.findIndex(g => g.id === currentGuestId);
+                            if (guestIndex !== -1) {
+                                guestList[guestIndex].cantidad_acompañante = newCantidad;
+                                localStorage.setItem('weddingGuests', JSON.stringify(guestList));
+                            }
+                        } catch (error) {
+                            console.error('Error al actualizar en Supabase:', error);
+                            // Intentar actualizar solo en localStorage como respaldo
+                            guestList = JSON.parse(localStorage.getItem('weddingGuests')) || [];
+                            const guestIndex = guestList.findIndex(g => g.id === currentGuestId);
+                            if (guestIndex !== -1) {
+                                guestList[guestIndex].cantidad_acompañante = newCantidad;
+                                localStorage.setItem('weddingGuests', JSON.stringify(guestList));
+                            }
+                        }
+                    } else {
+                        // Actualizar solo en localStorage
+                        guestList = JSON.parse(localStorage.getItem('weddingGuests')) || [];
+                        const guestIndex = guestList.findIndex(g => g.id === currentGuestId);
+                        if (guestIndex !== -1) {
+                            guestList[guestIndex].cantidad_acompañante = newCantidad;
+                            localStorage.setItem('weddingGuests', JSON.stringify(guestList));
+                        }
+                    }
+
+                    // Actualizar cantidad actual
+                    currentGuestCantidad = newCantidad;
+                    document.getElementById('currentCompanionsCount').textContent = newCantidad;
+                    
+                    showCompanionsMessage(`✓ Cantidad de acompañantes actualizada exitosamente a ${newCantidad}.`, 'success');
+                    
+                    // Actualizar opciones visibles según la nueva cantidad
+                    const companionsSelectionSection = document.getElementById('companionsSelectionSection');
+                    const companions1Option = document.getElementById('companions1').closest('.radio-option');
+                    const companions0Option = document.getElementById('companions0').closest('.radio-option');
+                    
+                    // Si la nueva cantidad es 0, ocultar toda la sección de selección
+                    if (newCantidad === 0) {
+                        companionsSelectionSection.style.display = 'none';
+                    } else {
+                        companionsSelectionSection.style.display = 'block';
+                        
+                        // Ocultar opciones que ya no son válidas
+                        if (newCantidad >= 1) {
+                            companions1Option.style.display = 'flex';
+                        } else {
+                            companions1Option.style.display = 'none';
+                        }
+                        
+                        companions0Option.style.display = 'flex';
+                        
+                        // Actualizar selección
+                        document.getElementById('companions1').checked = newCantidad === 1;
+                        document.getElementById('companions0').checked = newCantidad === 0;
+                    }
+
+                } catch (error) {
+                    console.error('Error al guardar cambios:', error);
+                    showCompanionsMessage('Error al guardar los cambios. Por favor intenta nuevamente.', 'error');
+                } finally {
+                    saveCompanionsBtn.disabled = false;
+                    saveCompanionsBtn.textContent = 'Guardar Cambios';
+                }
+            });
+        }
+
+        // Función auxiliar para mostrar mensajes
+        function showCompanionsMessage(message, type) {
+            companionsMessage.textContent = message;
+            companionsMessage.className = 'companions-message ' + type;
+            companionsMessage.style.display = 'block';
+            
+            // Ocultar después de 5 segundos si es éxito
+            if (type === 'success') {
+                setTimeout(() => {
+                    companionsMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Permitir búsqueda con Enter
+        if (searchGuestNameInput) {
+            searchGuestNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (searchGuestBtn) {
+                        searchGuestBtn.click();
+                    }
+                }
+            });
         }
     </script>
 </body>

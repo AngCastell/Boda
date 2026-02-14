@@ -28,12 +28,16 @@ class SupabaseService {
         }
 
         try {
+            // Si no asistirá, cantidad_acompañante = 0, de lo contrario = 2
+            const cantidadAcompañante = guestData.attendance === 'no' ? 0 : 2;
+            
             const { data, error } = await this.client
                 .from('wedding_guests')
                 .insert([
                     {
                         name: guestData.name,
-                        attendance: guestData.attendance
+                        attendance: guestData.attendance,
+                        cantidad_acompañante: cantidadAcompañante
                     }
                 ])
                 .select()
@@ -47,6 +51,7 @@ class SupabaseService {
                 id: data.id,
                 name: data.name,
                 attendance: data.attendance,
+                cantidad_acompañante: data.cantidad_acompañante ?? 2,
                 timestamp: new Date(data.created_at).toLocaleString('es-MX')
             };
         } catch (error) {
@@ -79,6 +84,7 @@ class SupabaseService {
                 id: guest.id,
                 name: guest.name,
                 attendance: guest.attendance,
+                cantidad_acompañante: guest.cantidad_acompañante ?? 2,
                 timestamp: new Date(guest.created_at).toLocaleString('es-MX')
             }));
         } catch (error) {
@@ -111,6 +117,7 @@ class SupabaseService {
                 id: guest.id,
                 name: guest.name,
                 attendance: guest.attendance,
+                cantidad_acompañante: guest.cantidad_acompañante ?? 2,
                 timestamp: new Date(guest.created_at).toLocaleString('es-MX')
             }));
         } catch (error) {
@@ -149,10 +156,129 @@ class SupabaseService {
                 id: data.id,
                 name: data.name,
                 attendance: data.attendance,
+                cantidad_acompañante: data.cantidad_acompañante ?? 2,
                 timestamp: new Date(data.updated_at).toLocaleString('es-MX')
             };
         } catch (error) {
             console.error('Error al actualizar invitado:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Buscar invitado por nombre completo
+     * @param {string} name - Nombre completo del invitado
+     * @returns {Promise<Object|null>} - Datos del invitado encontrado o null
+     */
+    async findGuestByName(name) {
+        if (!this.client) {
+            throw new Error('Cliente de Supabase no inicializado');
+        }
+
+        try {
+            const searchName = name.trim();
+            
+            // Primero intentar búsqueda exacta (case-insensitive)
+            let { data, error } = await this.client
+                .from('wedding_guests')
+                .select('*')
+                .ilike('name', searchName)
+                .limit(1)
+                .maybeSingle();
+
+            // Si no se encuentra con búsqueda exacta, intentar búsqueda parcial
+            if (!data && error && error.code === 'PGRST116') {
+                const { data: partialData, error: partialError } = await this.client
+                    .from('wedding_guests')
+                    .select('*')
+                    .ilike('name', `%${searchName}%`)
+                    .limit(1)
+                    .maybeSingle();
+                
+                if (partialData) {
+                    data = partialData;
+                    error = null;
+                } else if (partialError && partialError.code !== 'PGRST116') {
+                    throw partialError;
+                }
+            } else if (error && error.code !== 'PGRST116') {
+                throw error;
+            }
+
+            if (!data) {
+                return null;
+            }
+
+            return {
+                id: data.id,
+                name: data.name,
+                attendance: data.attendance,
+                cantidad_acompañante: data.cantidad_acompañante ?? 2,
+                timestamp: new Date(data.created_at).toLocaleString('es-MX')
+            };
+        } catch (error) {
+            console.error('Error al buscar invitado:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Actualizar cantidad de acompañantes de un invitado
+     * @param {number} id - ID del invitado
+     * @param {number} cantidad - Nueva cantidad de acompañantes (0, 1 o 2)
+     * @returns {Promise<Object>} - Datos actualizados del invitado
+     */
+    async updateCantidadAcompañantes(id, cantidad) {
+        if (!this.client) {
+            throw new Error('Cliente de Supabase no inicializado');
+        }
+
+        // Validar que la cantidad sea válida (0, 1 o 2)
+        if (cantidad < 0 || cantidad > 2) {
+            throw new Error('La cantidad de acompañantes debe ser 0, 1 o 2');
+        }
+
+        try {
+            // Primero obtener el invitado actual para validar
+            const { data: currentGuest, error: fetchError } = await this.client
+                .from('wedding_guests')
+                .select('cantidad_acompañante')
+                .eq('id', id)
+                .single();
+
+            if (fetchError) {
+                throw fetchError;
+            }
+
+            const currentCantidad = currentGuest.cantidad_acompañante ?? 2;
+
+            // Solo permitir disminuir, no aumentar
+            if (cantidad > currentCantidad) {
+                throw new Error('No se puede aumentar la cantidad de acompañantes. Solo se permite disminuir.');
+            }
+
+            const { data, error } = await this.client
+                .from('wedding_guests')
+                .update({
+                    cantidad_acompañante: cantidad
+                })
+                .eq('id', id)
+                .select()
+                .single();
+
+            if (error) {
+                throw error;
+            }
+
+            return {
+                id: data.id,
+                name: data.name,
+                attendance: data.attendance,
+                cantidad_acompañante: data.cantidad_acompañante,
+                timestamp: new Date(data.updated_at).toLocaleString('es-MX')
+            };
+        } catch (error) {
+            console.error('Error al actualizar cantidad de acompañantes:', error);
             throw error;
         }
     }
