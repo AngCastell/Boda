@@ -1063,7 +1063,36 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             color: #2c2c2c;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f8f8;
+            border-left: 3px solid #8b7355;
+            border-radius: 4px;
+        }
+
+        .guest-companions-info p {
+            margin: 5px 0;
+        }
+
+        .companions-count-display {
+            font-size: 24px;
+            font-weight: 600;
+            color: #8b7355;
             margin: 10px 0;
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .companions-count-display span:first-child {
+            font-size: 32px;
+            color: #6b5a45;
+        }
+
+        .companions-label {
+            font-size: 16px;
+            font-weight: 400;
+            color: #6b7d6b;
         }
 
         .companions-radio-group {
@@ -1786,25 +1815,20 @@
                     <div class="guest-info">
                         <h3 id="foundGuestName"></h3>
                         <p class="guest-attendance-info" id="guestAttendanceInfo"></p>
-                        <p class="guest-companions-info">Acompañantes actuales: <strong id="currentCompanionsCount">2</strong></p>
+                        <div class="guest-companions-info">
+                            <p><strong>Cantidad de acompañantes:</strong></p>
+                            <p class="companions-count-display">
+                                <span id="currentCompanionsCount">2</span>
+                                <span class="companions-label" id="companionsLabel">acompañantes</span>
+                            </p>
+                        </div>
                     </div>
                     
                     <div id="companionsSelectionSection">
                         <div class="form-group">
                             <label>Selecciona la nueva cantidad de acompañantes:</label>
-                            <div class="radio-group companions-radio-group">
-                                <label class="radio-option">
-                                    <input type="radio" name="companionsCount" value="2" id="companions2">
-                                    <span>2 acompañantes</span>
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" name="companionsCount" value="1" id="companions1">
-                                    <span>1 invitado</span>
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" name="companionsCount" value="0" id="companions0">
-                                    <span>Sin acompañantes</span>
-                                </label>
+                            <div class="radio-group companions-radio-group" id="companionsRadioGroup">
+                                <!-- Las opciones se generan dinámicamente según la cantidad actual -->
                             </div>
                         </div>
                         
@@ -2148,21 +2172,11 @@
                 
                 // Resetear visibilidad de opciones
                 const companionsSelectionSection = document.getElementById('companionsSelectionSection');
-                const companions2Option = document.getElementById('companions2').closest('.radio-option');
-                const companions1Option = document.getElementById('companions1').closest('.radio-option');
-                const companions0Option = document.getElementById('companions0').closest('.radio-option');
+                const companionsRadioGroup = document.getElementById('companionsRadioGroup');
                 
-                // Mostrar sección de selección por defecto al abrir el modal
-                companionsSelectionSection.style.display = 'block';
-                
-                companions2Option.style.display = 'none'; // Siempre oculto (solo disminución)
-                companions1Option.style.display = 'flex';
-                companions0Option.style.display = 'flex';
-                
-                // Desmarcar todas las opciones
-                document.getElementById('companions2').checked = false;
-                document.getElementById('companions1').checked = false;
-                document.getElementById('companions0').checked = false;
+                // Limpiar opciones al abrir el modal (se generarán cuando se busque un invitado)
+                companionsSelectionSection.style.display = 'none';
+                companionsRadioGroup.innerHTML = '';
             });
         }
 
@@ -2241,46 +2255,34 @@
                     document.getElementById('foundGuestName').textContent = guest.name;
                     document.getElementById('currentCompanionsCount').textContent = currentGuestCantidad;
                     
+                    // Actualizar etiqueta según la cantidad
+                    const companionsLabel = document.getElementById('companionsLabel');
+                    if (currentGuestCantidad === 0) {
+                        companionsLabel.textContent = 'acompañantes';
+                    } else if (currentGuestCantidad === 1) {
+                        companionsLabel.textContent = 'invitado';
+                    } else {
+                        companionsLabel.textContent = 'acompañantes';
+                    }
+                    
                     const attendanceText = guest.attendance === 'yes' 
                         ? '✓ Asistencia confirmada' 
                         : '✗ No asistirá';
                     document.getElementById('guestAttendanceInfo').textContent = attendanceText;
                     
                     // Obtener referencias a los elementos
-                    const companions2Option = document.getElementById('companions2').closest('.radio-option');
-                    const companions1Option = document.getElementById('companions1').closest('.radio-option');
-                    const companions0Option = document.getElementById('companions0').closest('.radio-option');
                     const companionsSelectionSection = document.getElementById('companionsSelectionSection');
-                    
-                    // Ocultar la opción de 2 acompañantes (solo se puede disminuir)
-                    companions2Option.style.display = 'none';
+                    const companionsRadioGroup = document.getElementById('companionsRadioGroup');
                     
                     // Si el invitado tiene 0 acompañantes, ocultar toda la sección de selección
                     if (currentGuestCantidad === 0) {
                         companionsSelectionSection.style.display = 'none';
-                        // Desmarcar todas las opciones
-                        document.getElementById('companions2').checked = false;
-                        document.getElementById('companions1').checked = false;
-                        document.getElementById('companions0').checked = false;
                     } else {
                         // Mostrar la sección de selección
                         companionsSelectionSection.style.display = 'block';
                         
-                        // Desmarcar todas las opciones primero
-                        document.getElementById('companions2').checked = false;
-                        document.getElementById('companions1').checked = false;
-                        document.getElementById('companions0').checked = false;
-                        
-                        // Mostrar opciones según la cantidad actual (solo opciones de disminución)
-                        if (currentGuestCantidad === 2) {
-                            // Si tiene 2, mostrar "1 invitado" y "Sin acompañantes"
-                            companions1Option.style.display = 'flex';
-                            companions0Option.style.display = 'flex';
-                        } else if (currentGuestCantidad === 1) {
-                            // Si tiene 1, mostrar solo "Sin acompañantes"
-                            companions1Option.style.display = 'none';
-                            companions0Option.style.display = 'flex';
-                        }
+                        // Generar opciones dinámicamente (solo opciones de disminución)
+                        generateCompanionsOptions(currentGuestCantidad, companionsRadioGroup);
                     }
                     
                     guestSearchResult.style.display = 'block';
@@ -2359,35 +2361,29 @@
                     currentGuestCantidad = newCantidad;
                     document.getElementById('currentCompanionsCount').textContent = newCantidad;
                     
+                    // Actualizar etiqueta según la nueva cantidad
+                    const companionsLabel = document.getElementById('companionsLabel');
+                    if (newCantidad === 0) {
+                        companionsLabel.textContent = 'acompañantes';
+                    } else if (newCantidad === 1) {
+                        companionsLabel.textContent = 'invitado';
+                    } else {
+                        companionsLabel.textContent = 'acompañantes';
+                    }
+                    
                     showCompanionsMessage(`✓ Cantidad de acompañantes actualizada exitosamente a ${newCantidad}.`, 'success');
                     
                     // Actualizar opciones visibles según la nueva cantidad
                     const companionsSelectionSection = document.getElementById('companionsSelectionSection');
-                    const companions1Option = document.getElementById('companions1').closest('.radio-option');
-                    const companions0Option = document.getElementById('companions0').closest('.radio-option');
+                    const companionsRadioGroup = document.getElementById('companionsRadioGroup');
                     
                     // Si la nueva cantidad es 0, ocultar toda la sección de selección
                     if (newCantidad === 0) {
                         companionsSelectionSection.style.display = 'none';
-                        // Desmarcar todas las opciones
-                        document.getElementById('companions1').checked = false;
-                        document.getElementById('companions0').checked = false;
-                    } else if (newCantidad === 1) {
-                        // Si tiene 1, mostrar solo "Sin acompañantes"
+                    } else {
+                        // Regenerar opciones con la nueva cantidad
                         companionsSelectionSection.style.display = 'block';
-                        companions1Option.style.display = 'none';
-                        companions0Option.style.display = 'flex';
-                        // Actualizar selección
-                        document.getElementById('companions1').checked = false;
-                        document.getElementById('companions0').checked = false;
-                    } else if (newCantidad === 2) {
-                        // Si tiene 2, mostrar "1 invitado" y "Sin acompañantes"
-                        companionsSelectionSection.style.display = 'block';
-                        companions1Option.style.display = 'flex';
-                        companions0Option.style.display = 'flex';
-                        // Actualizar selección
-                        document.getElementById('companions1').checked = false;
-                        document.getElementById('companions0').checked = false;
+                        generateCompanionsOptions(newCantidad, companionsRadioGroup);
                     }
 
                 } catch (error) {
@@ -2398,6 +2394,37 @@
                     saveCompanionsBtn.textContent = 'Guardar Cambios';
                 }
             });
+        }
+
+        // Función auxiliar para generar opciones de acompañantes dinámicamente
+        function generateCompanionsOptions(currentCantidad, container) {
+            // Limpiar opciones existentes
+            container.innerHTML = '';
+            
+            // Generar opciones desde currentCantidad - 1 hasta 0 (solo disminución)
+            for (let i = currentCantidad - 1; i >= 0; i--) {
+                const label = document.createElement('label');
+                label.className = 'radio-option';
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'companionsCount';
+                input.value = i;
+                input.id = `companions${i}`;
+                
+                const span = document.createElement('span');
+                if (i === 0) {
+                    span.textContent = 'Sin acompañantes';
+                } else if (i === 1) {
+                    span.textContent = '1 invitado';
+                } else {
+                    span.textContent = `${i} acompañantes`;
+                }
+                
+                label.appendChild(input);
+                label.appendChild(span);
+                container.appendChild(label);
+            }
         }
 
         // Función auxiliar para mostrar mensajes
