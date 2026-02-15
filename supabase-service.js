@@ -233,9 +233,9 @@ class SupabaseService {
             throw new Error('Cliente de Supabase no inicializado');
         }
 
-        // Validar que la cantidad sea válida (0, 1 o 2)
-        if (cantidad < 0 || cantidad > 2) {
-            throw new Error('La cantidad de acompañantes debe ser 0, 1 o 2');
+        // Validar que la cantidad sea válida (mínimo 0)
+        if (cantidad < 0) {
+            throw new Error('La cantidad de acompañantes debe ser mayor o igual a 0');
         }
 
         try {
