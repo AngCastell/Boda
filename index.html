@@ -2079,9 +2079,19 @@
                     const farewellCountdown = document.getElementById('farewellCountdown');
 
                     if (formData.attendance === 'yes') {
-                        farewellTitle.textContent = `¡Gracias por confirmar, ${formData.name}!`;
-                        farewellMessage.textContent = 'Tu asistencia ha sido registrada exitosamente.';
-                        farewellSubmessage.textContent = 'Estamos emocionados de compartir este día especial contigo.';
+                        // Si hay un mensaje personalizado desde invitados_maestro, usarlo
+                        if (savedGuest && savedGuest.mensaje) {
+                            const mensajeLineas = savedGuest.mensaje.split('\n');
+                            farewellTitle.textContent = mensajeLineas[0] || `¡Gracias por confirmar, ${formData.name}!`; // Primera línea del mensaje
+                            farewellMessage.textContent = mensajeLineas[1] || 'Tu asistencia ha sido registrada exitosamente.'; // Segunda línea
+                            farewellSubmessage.textContent = 'Estamos emocionados de compartir este día especial contigo.';
+                            console.log('Mostrando mensaje personalizado:', savedGuest.mensaje);
+                        } else {
+                            farewellTitle.textContent = `¡Gracias por confirmar, ${formData.name}!`;
+                            farewellMessage.textContent = 'Tu asistencia ha sido registrada exitosamente.';
+                            farewellSubmessage.textContent = 'Estamos emocionados de compartir este día especial contigo.';
+                            console.log('No se encontró mensaje personalizado. savedGuest:', savedGuest);
+                        }
                         if (farewellCountdown) {
                             farewellCountdown.style.display = 'block';
                         }
@@ -2452,4 +2462,3 @@
     </script>
 </body>
 </html>
-
