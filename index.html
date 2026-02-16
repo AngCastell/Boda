@@ -912,8 +912,27 @@
 
         /* Animaciones de botones removidas */
 
+        /* ========== ANUNCIO INFORMATIVO ========== */
+        .info-announcement {
+            background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d4 100%);
+            border-left: 4px solid #8b7355;
+            padding: 15px 20px;
+            margin: 25px 0 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(139, 115, 85, 0.1);
+        }
+
+        .info-announcement p {
+            margin: 0;
+            color: #6b7d6b;
+            font-size: 14px;
+            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
+        }
+
         /* ========== BOTÓN Y MODAL PARA MODIFICAR ACOMPAÑANTES ========== */
-        .modify-companions-btn {
+        .modify-companions-btn,
+        .check-passes-btn {
             background: transparent;
             color: #6b7d6b;
             padding: 12px 35px;
@@ -930,15 +949,38 @@
             width: 100%;
         }
 
-        .modify-companions-btn:hover {
+        .modify-companions-btn:hover,
+        .check-passes-btn:hover {
             background: #8b7355;
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(139, 115, 85, 0.3);
         }
 
-        .modify-companions-btn:active {
+        .modify-companions-btn:active,
+        .check-passes-btn:active {
             transform: translateY(0);
+        }
+        
+        .guest-passes-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .passes-count-display {
+            font-size: 32px;
+            font-weight: 600;
+            color: #8b7355;
+            margin: 10px 0;
+        }
+        
+        .passes-label {
+            font-size: 18px;
+            color: #6b7d6b;
+            margin-left: 5px;
         }
 
         .companions-modal {
@@ -1122,6 +1164,15 @@
         }
 
         @media (max-width: 480px) {
+            .info-announcement {
+                padding: 12px 15px;
+                margin: 20px 0 15px 0;
+            }
+
+            .info-announcement p {
+                font-size: 13px;
+            }
+
             .companions-modal {
                 padding: 10px;
             }
@@ -1787,6 +1838,14 @@
                         <button type="submit" class="submit-btn">Confirmar Asistencia</button>
                     </form>
                     
+                    <!-- Anuncio informativo -->
+                    <div class="info-announcement">
+                        <p>💡 Si ya confirmaste tu asistencia, puedes consultar o modificar tus pases usando los botones a continuación.</p>
+                    </div>
+                    
+                    <!-- Botón para consultar pases -->
+                    <button type="button" class="check-passes-btn" id="checkPassesBtn">Consultar Pases</button>
+                    
                     <!-- Botón para modificar acompañantes -->
                     <button type="button" class="modify-companions-btn" id="modifyCompanionsBtn">Modificar Acompañantes</button>
                 </div>
@@ -1834,6 +1893,38 @@
                 </div>
                 
                 <div id="companionsMessage" class="companions-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para consultar pases -->
+    <div class="companions-modal" id="passesModal">
+        <div class="companions-modal-content">
+            <div class="companions-modal-header">
+                <h2>Consultar Pases</h2>
+                <button class="companions-modal-close" id="passesModalClose">&times;</button>
+            </div>
+            <div class="companions-modal-body">
+                <div class="form-group">
+                    <label for="searchPassesName">Buscar invitado por nombre completo *</label>
+                    <input type="text" id="searchPassesName" placeholder="Ingrese su nombre completo">
+                    <button type="button" class="search-btn" id="searchPassesBtn">Buscar</button>
+                </div>
+                
+                <div id="passesSearchResult" class="guest-search-result" style="display: none;">
+                    <div class="guest-info">
+                        <h3 id="foundPassesGuestName"></h3>
+                        <div class="guest-passes-info">
+                            <p><strong>Cantidad de pases asignados:</strong></p>
+                            <p class="passes-count-display">
+                                <span id="currentPassesCount">0</span>
+                                <span class="passes-label" id="passesLabel">pases</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="passesMessage" class="companions-message" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -2455,6 +2546,174 @@
                     e.preventDefault();
                     if (searchGuestBtn) {
                         searchGuestBtn.click();
+                    }
+                }
+            });
+        }
+
+        // ========== MODAL PARA CONSULTAR PASES ==========
+        const checkPassesBtn = document.getElementById('checkPassesBtn');
+        const passesModal = document.getElementById('passesModal');
+        const passesModalClose = document.getElementById('passesModalClose');
+        const searchPassesBtn = document.getElementById('searchPassesBtn');
+        const searchPassesNameInput = document.getElementById('searchPassesName');
+        const passesSearchResult = document.getElementById('passesSearchResult');
+        const passesMessage = document.getElementById('passesMessage');
+
+        // Función auxiliar para mostrar mensajes en el modal de pases
+        function showPassesMessage(message, type) {
+            passesMessage.textContent = message;
+            passesMessage.className = 'companions-message ' + type;
+            passesMessage.style.display = 'block';
+            
+            // Ocultar después de 5 segundos si es éxito
+            if (type === 'success') {
+                setTimeout(() => {
+                    passesMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Abrir modal
+        if (checkPassesBtn) {
+            checkPassesBtn.addEventListener('click', function() {
+                passesModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                // Limpiar formulario
+                searchPassesNameInput.value = '';
+                passesSearchResult.style.display = 'none';
+                passesMessage.style.display = 'none';
+            });
+        }
+
+        // Cerrar modal
+        if (passesModalClose) {
+            passesModalClose.addEventListener('click', function() {
+                passesModal.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera
+        if (passesModal) {
+            passesModal.addEventListener('click', function(e) {
+                if (e.target === passesModal) {
+                    passesModal.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+
+        // Buscar invitado primero en confirmaciones, luego en invitados_maestro
+        if (searchPassesBtn) {
+            searchPassesBtn.addEventListener('click', async function() {
+                const searchName = searchPassesNameInput.value.trim();
+                
+                if (!searchName || searchName.length < 2) {
+                    showPassesMessage('Por favor ingresa un nombre válido (mínimo 2 caracteres)', 'error');
+                    return;
+                }
+
+                // Mostrar indicador de carga
+                searchPassesBtn.disabled = true;
+                searchPassesBtn.textContent = 'Buscando...';
+
+                try {
+                    let guest = null;
+                    let invitadoMaestro = null;
+
+                    // Primero buscar en wedding_guests (tabla de confirmaciones)
+                    if (useSupabase && supabaseService) {
+                        try {
+                            // Buscar en la tabla de confirmaciones
+                            guest = await supabaseService.findGuestByName(searchName);
+                            
+                            if (!guest) {
+                                showPassesMessage('No se encontró ningún invitado registrado con ese nombre. Por favor verifica que hayas confirmado tu asistencia.', 'error');
+                                passesSearchResult.style.display = 'none';
+                                searchPassesBtn.disabled = false;
+                                searchPassesBtn.textContent = 'Buscar';
+                                return;
+                            }
+
+                            // Si está registrado, buscar en invitados_maestro para obtener los pases
+                            invitadoMaestro = await supabaseService.findInvitadoMaestro(guest.name);
+                            
+                        } catch (error) {
+                            console.error('Error al buscar en Supabase:', error);
+                            showPassesMessage('Error al buscar en la base de datos. Por favor intenta nuevamente.', 'error');
+                            searchPassesBtn.disabled = false;
+                            searchPassesBtn.textContent = 'Buscar';
+                            return;
+                        }
+                    } else {
+                        // Buscar en localStorage como respaldo
+                        guestList = JSON.parse(localStorage.getItem('weddingGuests')) || [];
+                        guest = guestList.find(g => g.name.toLowerCase().includes(searchName.toLowerCase()));
+                        
+                        if (!guest) {
+                            showPassesMessage('No se encontró ningún invitado registrado con ese nombre. Por favor verifica que hayas confirmado tu asistencia.', 'error');
+                            passesSearchResult.style.display = 'none';
+                            searchPassesBtn.disabled = false;
+                            searchPassesBtn.textContent = 'Buscar';
+                            return;
+                        }
+                    }
+
+                    // Si se encontró en confirmaciones pero no en invitados_maestro
+                    if (!invitadoMaestro) {
+                        // Mostrar información del invitado registrado pero sin pases en la lista maestra
+                        document.getElementById('foundPassesGuestName').textContent = guest.name;
+                        document.getElementById('currentPassesCount').textContent = guest.cantidad_acompañante || 0;
+                        
+                        const passesLabel = document.getElementById('passesLabel');
+                        const cantidad = guest.cantidad_acompañante || 0;
+                        if (cantidad === 1) {
+                            passesLabel.textContent = 'pase';
+                        } else {
+                            passesLabel.textContent = 'pases';
+                        }
+                        
+                        passesSearchResult.style.display = 'block';
+                        passesMessage.style.display = 'none';
+                        searchPassesBtn.disabled = false;
+                        searchPassesBtn.textContent = 'Buscar';
+                        return;
+                    }
+
+                    // Mostrar resultado con información de invitados_maestro
+                    document.getElementById('foundPassesGuestName').textContent = invitadoMaestro.nombre;
+                    document.getElementById('currentPassesCount').textContent = invitadoMaestro.cantidad_pases;
+                    
+                    // Actualizar etiqueta según la cantidad
+                    const passesLabel = document.getElementById('passesLabel');
+                    if (invitadoMaestro.cantidad_pases === 1) {
+                        passesLabel.textContent = 'pase';
+                    } else {
+                        passesLabel.textContent = 'pases';
+                    }
+                    
+                    passesSearchResult.style.display = 'block';
+                    passesMessage.style.display = 'none';
+                    searchPassesBtn.disabled = false;
+                    searchPassesBtn.textContent = 'Buscar';
+
+                } catch (error) {
+                    console.error('Error al buscar pases:', error);
+                    showPassesMessage('Hubo un error al buscar. Por favor intenta nuevamente.', 'error');
+                    searchPassesBtn.disabled = false;
+                    searchPassesBtn.textContent = 'Buscar';
+                }
+            });
+        }
+
+        // Permitir búsqueda con Enter en el modal de pases
+        if (searchPassesNameInput) {
+            searchPassesNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (searchPassesBtn) {
+                        searchPassesBtn.click();
                     }
                 }
             });
